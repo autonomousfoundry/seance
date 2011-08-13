@@ -1,0 +1,9 @@
+{
+    "name": "Seance",
+    "description": "Use PhantomJS to drive headless browser tests from Node.",
+    "version": "0.0.1",
+    "private": "true",
+    "devDependencies": {
+        "nodeunit": ">=0.5.3",
+    }
+}
