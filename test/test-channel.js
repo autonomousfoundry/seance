@@ -1,4 +1,5 @@
 var channel = require("../lib/channel");
+var util = require("../lib/util");
 var http = require("http");
 
 exports["creates a two-way channel of communication with a PhantomJS WebPage object"] = function(test) {
@@ -20,11 +21,12 @@ exports["loads a URL into the WebPage upon creation, if specified"] = function(t
         res.writeHead(200, {"Content-Type": "text/html"});
         res.end("<html><body></body></html>");
     });
-    server.listen("6543");
-    var c = channel.create("http://localhost:6543/");
+    var port = util.getUnusedPort();
+    server.listen(port);
+    var c = channel.create("http://localhost:"+port+"/");
     c.send("console.log(document.location.href)");
     c.once("output", function(data) {
-        test.equal("http://localhost:6543/", data);
+        test.equal("http://localhost:"+port+"/", data);
         server.close();
         c.close();
         test.done();
