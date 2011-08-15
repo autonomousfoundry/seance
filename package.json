@@ -4,6 +4,6 @@
     "version": "0.0.1",
     "private": "true",
     "devDependencies": {
-        "nodeunit": ">=0.5.3",
+        "nodeunit": ">=0.5.3"
     }
 }
