@@ -16,6 +16,12 @@ exports["creates a two-way channel of communication with a PhantomJS WebPage obj
     });
 };
 
+exports["emits a 'close' event when closed"] = function(test) {
+    var c = channel.create();
+    c.on("close", test.done); 
+    c.close();
+};
+
 exports["loads a URL into the WebPage upon creation, if specified"] = function(test) {
     var server = http.createServer(function(req, res) {
         res.writeHead(200, {"Content-Type": "text/html"});
