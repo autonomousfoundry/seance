@@ -8,7 +8,7 @@ exports["attaches to a node http server and closes it when done"] = function(tes
     test.done();
 };
 
-exports["executes javascript and calls back with the result"] = function(test) {
+exports["evaluates a javascript expression and notifies with result"] = function(test) {
     var server = createServer();
     var page = seance.attach(server);
     page.evaluate("document.title", function(value) {
@@ -18,7 +18,19 @@ exports["executes javascript and calls back with the result"] = function(test) {
     });
 };
 
-exports["executes javascript and compares the result when available"] = function(test) {
+exports["executes a javascript statement and notifies when done"] = function(test) {
+    var server = createServer();
+    var page = seance.attach(server);
+    page.execute("document.title = 'NewTitle'", function() {
+        page.evaluate("document.title", function(value) {
+            test.equal("NewTitle", value);
+            page.close();
+            test.done();
+        });
+    });
+};
+
+exports["evaluates javascript and compares the result when available"] = function(test) {
     var server = createServer();
     var page = seance.attach(server);
     page.expectScriptResult("document.title", "TheTitle", function() {
