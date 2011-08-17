@@ -30,6 +30,19 @@ exports["executes a javascript statement and notifies when done"] = function(tes
     });
 };
 
+exports["executes multiple javascript statements in order"] = function(test) {
+    var server = createServer();
+    var page = seance.attach(server);
+    page.execute("var x = 2;");
+    page.execute("x *= 3;");
+    page.execute("x -= 1;");
+    page.evaluate("x", function(value) {
+        test.equal(value, 5);
+        page.close();
+        test.done();
+    });
+};
+
 exports["evaluates javascript and compares the result when available"] = function(test) {
     var server = createServer();
     var page = seance.attach(server);
