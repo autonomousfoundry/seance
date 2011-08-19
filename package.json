@@ -5,5 +5,8 @@
     "private": "true",
     "devDependencies": {
         "nodeunit": ">=0.5.3"
+    },
+    "scripts": {
+        "test": "node_modules/.bin/nodeunit test"
     }
 }
