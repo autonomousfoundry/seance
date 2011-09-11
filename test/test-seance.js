@@ -52,9 +52,24 @@ exports["evaluates javascript and compares the result when available"] = functio
     });
 };
 
-function createServer() {
+exports["provides hasContent to check for presence of text on the page"] = function(test) {
+    // Need an async error-trapping mechanism to test the failure case too
+    var server = createServer({jquery:true});
+    var page = seance.attach(server);
+    page.expectContent("SearchText", function() {
+        page.close();
+        test.done();
+    });
+};
+
+function createServer(options) {
     return http.createServer(function(req, res) {
         res.writeHead(200, {"Content-Type": "text/html"});
-        res.end("<html><head><title>TheTitle</title></head><body></body></html>");
+        res.write("<html><head>");
+        if(options && options.jquery) {
+            res.write("<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js'></script>");
+        }
+        res.write("<title>TheTitle</title></head>");
+        res.end("<body>SearchText</body></html>");
     });
 }
