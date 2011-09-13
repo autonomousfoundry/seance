@@ -1,16 +1,16 @@
 var seance = require("../lib");
 var http = require("http");
 
+var page;
+
 exports["attaches to a node http server and closes it when done"] = function(test) {
-    var server = createServer();
-    var page = seance.attach(server);
+    createPage();
     page.close();
     test.done();
 };
 
 exports["evaluates a javascript expression and notifies with result"] = function(test) {
-    var server = createServer();
-    var page = seance.attach(server);
+    createPage();
     page.evaluate("document.title", function(value) {
         test.equal("TheTitle", value);
         page.close();
@@ -19,8 +19,7 @@ exports["evaluates a javascript expression and notifies with result"] = function
 };
 
 exports["executes a javascript statement and notifies when done"] = function(test) {
-    var server = createServer();
-    var page = seance.attach(server);
+    createPage();
     page.execute("document.title = 'NewTitle'", function() {
         page.evaluate("document.title", function(value) {
             test.equal("NewTitle", value);
@@ -31,8 +30,7 @@ exports["executes a javascript statement and notifies when done"] = function(tes
 };
 
 exports["executes multiple javascript statements in order"] = function(test) {
-    var server = createServer();
-    var page = seance.attach(server);
+    createPage();
     page.execute("var x = 2;");
     page.execute("x *= 3;");
     page.execute("x -= 1;");
@@ -44,8 +42,7 @@ exports["executes multiple javascript statements in order"] = function(test) {
 };
 
 exports["evaluates javascript and compares the result when available"] = function(test) {
-    var server = createServer();
-    var page = seance.attach(server);
+    createPage();
     page.expectScriptResult("document.title", "TheTitle", function() {
         page.close();
         test.done();
@@ -54,13 +51,17 @@ exports["evaluates javascript and compares the result when available"] = functio
 
 exports["provides hasContent to check for presence of text on the page"] = function(test) {
     // Need an async error-trapping mechanism to test the failure case too
-    var server = createServer({jquery:true});
-    var page = seance.attach(server);
+    createPage({jquery:true});
     page.expectContent("SearchText", function() {
         page.close();
         test.done();
     });
 };
+
+function createPage(options) {
+    var server = createServer(options);
+    page = seance.attach(server);
+}
 
 function createServer(options) {
     return http.createServer(function(req, res) {
