@@ -1,4 +1,4 @@
-var seance = require("../lib");
+var seance = require("..");
 var http = require("http");
 
 var page;

@@ -1,5 +1,5 @@
 {
-    "name": "Seance",
+    "name": "seance",
     "description": "Use PhantomJS to drive headless browser tests from Node.",
     "version": "0.0.1",
     "private": "true",
